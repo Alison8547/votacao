@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class VoteServiceImpl implements VoteService {
         }
         Vote vote = voteMapper.toVote(voteRequest);
         vote.setVotingSession(votingSession);
-        vote.setDateVote(LocalDateTime.now());
+        vote.setDateVote(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
 
         if (voteRepository.existsByVotingSessionAndCpfAssociado(votingSession, vote.getCpfAssociado())) {
             throw new BusinessException("CPF Associado já tem registrado voto nessa pauta!");

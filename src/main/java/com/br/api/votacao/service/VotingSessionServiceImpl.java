@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Slf4j
 @Service
@@ -33,11 +34,11 @@ public class VotingSessionServiceImpl implements VotingSessionService {
         }
 
         VotingSession votingSession = sessionMapper.toVotingSession(votingSessionRequest);
-        votingSession.setDateOpen(LocalDateTime.now());
+        votingSession.setDateOpen(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
         votingSession.setPauta(pauta);
 
         if (votingSession.getDateClosing() == null) {
-            votingSession.setDateClosing(LocalDateTime.now().plusSeconds(DEFAULT_TIME_VOTING));
+            votingSession.setDateClosing(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")).plusSeconds(DEFAULT_TIME_VOTING));
             log.info("Tempo padrão na sessão foi ativada!");
         }
 

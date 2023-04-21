@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,6 @@ public interface VotingSessionController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/create")
-    ResponseEntity<VotingSessionResponse> create(Integer idPauta, @Valid @RequestBody VotingSessionRequest votingSessionRequest);
+    @PostMapping("/create/{idPauta}")
+    ResponseEntity<VotingSessionResponse> create(@PathVariable(name = "idPauta") Integer idPauta, @Valid @RequestBody VotingSessionRequest votingSessionRequest);
 }
