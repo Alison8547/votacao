@@ -8,5 +8,5 @@ import javax.validation.constraints.NotBlank;
 public class PautaRequest {
 
     @NotBlank
-    private String pautaName;
+    private String pauta;
 }

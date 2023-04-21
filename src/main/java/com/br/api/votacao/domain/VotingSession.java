@@ -17,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "voting_session")
+@Table(name = "VOTING_SESSION")
 public class VotingSession implements Serializable {
 
     @Serial

@@ -2,14 +2,13 @@ package com.br.api.votacao.controller;
 
 import com.br.api.votacao.dto.request.PautaRequest;
 import com.br.api.votacao.dto.response.PautaResponse;
+import com.br.api.votacao.dto.response.ResultResponse;
 import com.br.api.votacao.service.PautaService;
 import com.br.api.votacao.service.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ public class PautaControllerImpl implements PautaController {
     }
 
     @Override
-    public ResponseEntity<Map<String, Long>> resultVoting(Integer idPauta) {
+    public ResponseEntity<ResultResponse> resultVoting(Integer idPauta) {
         return new ResponseEntity<>(voteService.resultVoting(idPauta), HttpStatus.OK);
     }
 

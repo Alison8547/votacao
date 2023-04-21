@@ -14,7 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "pauta")
+@Table(name = "PAUTA")
 public class Pauta implements Serializable {
 
     @Serial
@@ -24,6 +24,6 @@ public class Pauta implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer idPauta;
 
-    @Column(name = "name_pauta")
-    private String pautaName;
+    @Column(name = "pauta")
+    private String pauta;
 }

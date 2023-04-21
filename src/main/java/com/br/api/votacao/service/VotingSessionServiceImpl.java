@@ -42,6 +42,11 @@ public class VotingSessionServiceImpl implements VotingSessionService {
             log.info("Tempo padrão na sessão foi ativada!");
         }
 
+
+        if (votingSession.getDateClosing().isBefore(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")))) {
+            throw new BusinessException("Data de fechamento não pode ser antes da Data de abertura da Pauta!");
+        }
+
         votingSessionRepository.save(votingSession);
         log.info("Sessão criada com sucesso!");
 

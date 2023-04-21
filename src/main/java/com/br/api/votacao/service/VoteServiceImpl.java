@@ -1,8 +1,11 @@
 package com.br.api.votacao.service;
 
+import com.br.api.votacao.domain.Pauta;
 import com.br.api.votacao.domain.Vote;
 import com.br.api.votacao.domain.VotingSession;
+import com.br.api.votacao.domain.enums.MessageVote;
 import com.br.api.votacao.dto.request.VoteRequest;
+import com.br.api.votacao.dto.response.ResultResponse;
 import com.br.api.votacao.dto.response.VoteResponse;
 import com.br.api.votacao.exception.BusinessException;
 import com.br.api.votacao.mapper.VoteMapper;
@@ -34,7 +37,16 @@ public class VoteServiceImpl implements VoteService {
         if (LocalDateTime.now().isAfter(votingSession.getDateClosing())) {
             throw new BusinessException("Sessão de votação já está fechada!");
         }
+
         Vote vote = voteMapper.toVote(voteRequest);
+
+        if (voteRequest.getMessageVote().equalsIgnoreCase("Sim")) {
+            vote.setMessageVote(MessageVote.SIM);
+        } else if (voteRequest.getMessageVote().equalsIgnoreCase("Não")) {
+            vote.setMessageVote(MessageVote.NAO);
+        } else {
+            throw new BusinessException("Valor digitado incorreto! vote Sim ou Não");
+        }
         vote.setVotingSession(votingSession);
         vote.setDateVote(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
 
@@ -50,15 +62,19 @@ public class VoteServiceImpl implements VoteService {
 
 
     @Override
-    public Map<String, Long> resultVoting(Integer idPauta) {
+    public ResultResponse resultVoting(Integer idPauta) {
         Set<Vote> votesList = votingSessionService.getVotingSession(pautaService.findByIdPauta(idPauta)).getVotes();
+        Pauta pauta = pautaService.findByIdPauta(idPauta);
 
         Map<String, Long> resultMap = new HashMap<>();
-
         resultMap.put("SIM", votesList.stream().filter(x -> x.getMessageVote().toString().equalsIgnoreCase("SIM")).count());
         resultMap.put("NAO", votesList.stream().filter(x -> x.getMessageVote().toString().equalsIgnoreCase("NAO")).count());
 
-        return resultMap;
+        ResultResponse resultResponse = new ResultResponse();
+        resultResponse.setPauta(pauta.getPauta());
+        resultResponse.setResultado(resultMap);
+
+        return resultResponse;
     }
 
 

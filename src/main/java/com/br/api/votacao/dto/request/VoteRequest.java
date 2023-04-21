@@ -1,6 +1,5 @@
 package com.br.api.votacao.dto.request;
 
-import com.br.api.votacao.domain.enums.MessageVote;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -13,7 +12,7 @@ public class VoteRequest {
     private String cpfAssociado;
 
     @NotNull
-    private MessageVote messageVote;
+    private String messageVote;
 
 
 }

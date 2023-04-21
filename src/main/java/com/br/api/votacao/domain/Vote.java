@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "vote")
+@Table(name = "VOTE")
 public class Vote implements Serializable {
 
     @Serial

@@ -2,6 +2,7 @@ package com.br.api.votacao.controller;
 
 import com.br.api.votacao.dto.request.PautaRequest;
 import com.br.api.votacao.dto.response.PautaResponse;
+import com.br.api.votacao.dto.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -10,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 @Validated
 @RequestMapping("/pauta")
@@ -35,5 +35,5 @@ public interface PautaController {
             }
     )
     @GetMapping("/result/{idPauta}")
-    ResponseEntity<Map<String, Long>> resultVoting(@PathVariable(name = "idPauta") Integer idPauta);
+    ResponseEntity<ResultResponse> resultVoting(@PathVariable(name = "idPauta") Integer idPauta);
 }

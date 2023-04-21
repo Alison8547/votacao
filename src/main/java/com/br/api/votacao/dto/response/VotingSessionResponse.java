@@ -11,5 +11,5 @@ public class VotingSessionResponse {
     private Integer idVotingSession;
     private LocalDateTime dateOpen;
     private LocalDateTime dateClosing;
-    private Pauta pauta;
+    private Pauta pautaVoting;
 }

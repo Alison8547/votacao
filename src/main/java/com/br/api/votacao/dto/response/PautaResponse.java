@@ -6,5 +6,5 @@ import lombok.Data;
 public class PautaResponse {
 
     private Integer idPauta;
-    private String pautaName;
+    private String pauta;
 }
