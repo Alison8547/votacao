@@ -4,10 +4,13 @@ import com.br.api.votacao.domain.Pauta;
 import com.br.api.votacao.domain.Vote;
 import com.br.api.votacao.domain.VotingSession;
 import com.br.api.votacao.domain.enums.MessageVote;
+import com.br.api.votacao.dto.request.ResultRequest;
 import com.br.api.votacao.dto.request.VoteRequest;
 import com.br.api.votacao.dto.response.ResultResponse;
 import com.br.api.votacao.dto.response.VoteResponse;
 import com.br.api.votacao.exception.BusinessException;
+import com.br.api.votacao.infrastructure.client.resultkafka.ResultKafkaApiClient;
+import com.br.api.votacao.mapper.ResultMapper;
 import com.br.api.votacao.mapper.VoteMapper;
 import com.br.api.votacao.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -29,6 +30,8 @@ public class VoteServiceImpl implements VoteService {
     private final VoteMapper voteMapper;
     private final VotingSessionServiceImpl votingSessionService;
     private final PautaServiceImpl pautaService;
+    private final ResultKafkaApiClient resultKafkaApiClient;
+    private final ResultMapper resultMapper;
 
     @Override
     public VoteResponse vote(Integer idPauta, VoteRequest voteRequest) {
@@ -66,6 +69,12 @@ public class VoteServiceImpl implements VoteService {
         Set<Vote> votesList = votingSessionService.getVotingSession(pautaService.findByIdPauta(idPauta)).getVotes();
         Pauta pauta = pautaService.findByIdPauta(idPauta);
 
+        VotingSession votingSession = votingSessionService.getVotingSession(pautaService.findByIdPauta(idPauta));
+
+        if (LocalDateTime.now(ZoneId.of("America/Sao_Paulo")).isBefore(votingSession.getDateClosing())) {
+            throw new BusinessException("Sessão ainda está aberta! não é possível ver ou enviar o resultado da votação");
+        }
+
         Map<String, Long> resultMap = new HashMap<>();
         resultMap.put("SIM", votesList.stream().filter(x -> x.getMessageVote().toString().equalsIgnoreCase("SIM")).count());
         resultMap.put("NAO", votesList.stream().filter(x -> x.getMessageVote().toString().equalsIgnoreCase("NAO")).count());
@@ -75,6 +84,17 @@ public class VoteServiceImpl implements VoteService {
         resultResponse.setResultado(resultMap);
 
         return resultResponse;
+    }
+
+    @Override
+    public void sendKafkaResultVoting(Integer idPauta) {
+        ResultResponse resultResponse = resultVoting(idPauta);
+        ResultRequest resultRequest = resultMapper.toRequestResult(resultResponse);
+
+        List<ResultRequest> resultRequestsList = new ArrayList<>();
+        resultRequestsList.add(resultRequest);
+
+        resultKafkaApiClient.sendResult(resultRequestsList);
     }
 
 

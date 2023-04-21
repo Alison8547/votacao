@@ -28,5 +28,11 @@ public class PautaControllerImpl implements PautaController {
         return new ResponseEntity<>(voteService.resultVoting(idPauta), HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<?> sendResultKafka(Integer idPauta) {
+        voteService.sendKafkaResultVoting(idPauta);
+        return ResponseEntity.ok("Registros enviado com sucesso!");
+    }
+
 
 }

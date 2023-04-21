@@ -11,4 +11,6 @@ public interface VoteService {
     VoteResponse vote(Integer idPauta, VoteRequest voteRequest);
 
     ResultResponse resultVoting(Integer idpauta);
+
+    void sendKafkaResultVoting(Integer idpauta);
 }

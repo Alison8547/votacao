@@ -36,4 +36,15 @@ public interface PautaController {
     )
     @GetMapping("/result/{idPauta}")
     ResponseEntity<ResultResponse> resultVoting(@PathVariable(name = "idPauta") Integer idPauta);
+
+    @Operation(summary = "Envia resultado da votação para a mensageria", description = "Envia para o Kafka para o restante da plataforma")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "Enviou com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @PostMapping("/send-kafka/{idPauta}")
+    ResponseEntity<?> sendResultKafka(@PathVariable(name = "idPauta")Integer idPauta);
 }

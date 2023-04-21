@@ -22,3 +22,7 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+application:
+  client:
+    result-kafka-api:
+      url: http://localhost:7272/result-voting/send
