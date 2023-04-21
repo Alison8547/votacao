@@ -47,9 +47,9 @@ public class VotingSessionServiceImpl implements VotingSessionService {
         return sessionMapper.toVotingSessionResponse(votingSession);
     }
 
-    public VotingSession findByIdVotingSession(Integer idVotingSession) {
-        return votingSessionRepository.findById(idVotingSession)
-                .orElseThrow(() -> new BusinessException("Votação de Sessão não encontrada!"));
+    public VotingSession getVotingSession(Pauta pauta) {
+        return votingSessionRepository.findByPauta(pauta)
+                .orElseThrow(() -> new BusinessException("Sessão e Pauta não encontrada!"));
     }
 
 }
