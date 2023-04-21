@@ -3,6 +3,7 @@ package com.br.api.votacao.service;
 import com.br.api.votacao.domain.Pauta;
 import com.br.api.votacao.dto.request.PautaRequest;
 import com.br.api.votacao.dto.response.PautaResponse;
+import com.br.api.votacao.exception.BusinessException;
 import com.br.api.votacao.mapper.PautaMapper;
 import com.br.api.votacao.repository.PautaRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,7 @@ public class PautaServiceImpl implements PautaService {
         return pautaMapper.toPautaResponse(pauta);
     }
 
-
+    public Pauta findByIdPauta(Integer idPauta) {
+        return pautaRepository.findById(idPauta).orElseThrow(() -> new BusinessException("Pauta não encontrada!"));
+    }
 }
