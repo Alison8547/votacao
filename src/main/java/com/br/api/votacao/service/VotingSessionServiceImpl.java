@@ -44,7 +44,7 @@ public class VotingSessionServiceImpl implements VotingSessionService {
 
 
         if (votingSession.getDateClosing().isBefore(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")))) {
-            throw new BusinessException("Data de fechamento não pode ser antes da Data de abertura da Pauta!");
+            throw new BusinessException("Data de fechamento não pode ser antes da Data de abertura da Sessão!");
         }
 
         votingSessionRepository.save(votingSession);
