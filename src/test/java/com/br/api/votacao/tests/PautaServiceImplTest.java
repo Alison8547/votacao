@@ -52,11 +52,10 @@ public class PautaServiceImplTest {
     @Test
     public void testMustFindByIdPautaWithSuccess() {
         //(SETUP)
-        Pauta pauta = new Pauta(1, "pauta 2.2");
-        when(pautaRepository.findById(anyInt())).thenReturn(Optional.of(pauta));
+        when(pautaRepository.findById(anyInt())).thenReturn(Optional.of(PautaBuilder.newPautaEntity()));
 
         //(ACT)
-        Pauta pautaFind = pautaService.findByIdPauta(pauta.getIdPauta());
+        Pauta pautaFind = pautaService.findByIdPauta(PautaBuilder.newPautaEntity().getIdPauta());
 
         //(ASSERT)
         assertNotNull(pautaFind);

@@ -24,6 +24,16 @@ public class VotingSessionBuilder {
                 .build();
     }
 
+    public static VotingSession newVotingSessionEntityBefore() {
+        return VotingSession.builder()
+                .idVotingSession(2)
+                .dateOpen(LocalDateTime.of(2023, 3, 11, 12, 22, 33))
+                .dateClosing(LocalDateTime.of(2023, 3, 14, 12, 22, 33))
+                .votes(votes)
+                .pauta(PautaBuilder.newPautaEntity())
+                .build();
+    }
+
     public static VotingSession newVotingSessionEntityBeforeDataOpen() {
         return VotingSession.builder()
                 .idVotingSession(2)

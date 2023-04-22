@@ -2,6 +2,7 @@ package com.br.api.votacao.tests;
 
 import com.br.api.votacao.builders.PautaBuilder;
 import com.br.api.votacao.builders.VotingSessionBuilder;
+import com.br.api.votacao.domain.VotingSession;
 import com.br.api.votacao.dto.response.VotingSessionResponse;
 import com.br.api.votacao.exception.BusinessException;
 import com.br.api.votacao.mapper.VotingSessionMapper;
@@ -42,7 +43,6 @@ public class VotingSessionServiceImplTest {
     public void testMustCreateVotingSessionWithSuccess() {
         //(SETUP)
         when(pautaService.findByIdPauta(anyInt())).thenReturn(PautaBuilder.newPautaEntityNoSession());
-        // when(votingSessionRepository.findByPauta(null)).thenReturn(Optional.of(VotingSessionBuilder.newVotingSessionEntity()));
         when(votingSessionMapper.toVotingSession(any())).thenReturn(VotingSessionBuilder.newVotingSessionEntity());
         when(votingSessionRepository.save(any())).thenReturn(VotingSessionBuilder.newVotingSessionEntity());
         when(votingSessionMapper.toVotingSessionResponse(any())).thenReturn(VotingSessionBuilder.newVotingSessionResponse());
@@ -97,5 +97,17 @@ public class VotingSessionServiceImplTest {
         //(ASSERT)
         assertNotNull(votingSessionOpen);
     }
+
+    @Test(expected = BusinessException.class)
+    public void testMustGetVotingSessionError() {
+        //(SETUP)
+
+        //(ACT)
+        VotingSession votingSession = votingSessionService.getVotingSession(PautaBuilder.newPautaEntity());
+
+        //(ASSERT)
+        assertNull(votingSession);
+    }
+
 
 }
