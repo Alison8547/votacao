@@ -10,7 +10,7 @@ public interface VoteService {
     @Transactional
     VoteResponse vote(Integer idPauta, VoteRequest voteRequest);
 
-    ResultResponse resultVoting(Integer idpauta);
+    ResultResponse resultVoting(Integer idPauta);
 
-    void sendKafkaResultVoting(Integer idpauta);
+    void sendKafkaResultVoting(Integer idPauta);
 }
