@@ -4,8 +4,10 @@ import com.br.api.votacao.builders.PautaBuilder;
 import com.br.api.votacao.builders.VoteBuilder;
 import com.br.api.votacao.builders.VotingSessionBuilder;
 import com.br.api.votacao.dto.response.ResultResponse;
+import com.br.api.votacao.dto.response.ValidResponse;
 import com.br.api.votacao.dto.response.VoteResponse;
 import com.br.api.votacao.exception.BusinessException;
+import com.br.api.votacao.infrastructure.client.invertexto.InverTextoApiClient;
 import com.br.api.votacao.infrastructure.client.resultkafka.ResultKafkaApiClient;
 import com.br.api.votacao.mapper.ResultMapper;
 import com.br.api.votacao.mapper.VoteMapper;
@@ -49,6 +51,9 @@ public class VoteServiceImplTest {
 
     @Mock
     private ResultKafkaApiClient resultKafkaApiClient;
+
+    @Mock
+    private InverTextoApiClient inverTextoApiClient;
 
     @Mock
     private ResultMapper resultMapper;
@@ -193,6 +198,22 @@ public class VoteServiceImplTest {
         assertEquals(PautaBuilder.newPautaEntity().getPauta(), result.getPauta());
         assertEquals(1, longList.get(0));
         assertEquals(0, longList.get(1));
+
+    }
+
+    @Test
+    public void testMustSendValidCpfVoteSuccess() {
+        //(SETUP)
+        String cpf = "725.780.400-10";
+
+        when(inverTextoApiClient.validCpf(any(), any(), any())).thenReturn(ValidResponse.builder().valid(true).build());
+
+        //(ACT)
+        ValidResponse validResponse = voteService.sendCpf(cpf);
+
+        //(ASSERT)
+        assertNotNull(validResponse);
+        assertTrue(validResponse.isValid());
 
     }
 
