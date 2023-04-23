@@ -1,4 +1,5 @@
 # Votação API REST
+**Java version 17**
 
 ---
 
@@ -60,7 +61,7 @@ Registrar seu voto na pauta http://localhost:8080/vote/register/{idPauta} <br />
 ```
 {
   "cpfAssociado": "878.740.080-49",
-  "messageVote": "NÃO"
+  "messageVote": "Não"
 }
 ```
 
@@ -71,7 +72,9 @@ Enviar o resultado da votação para o serviço de mensageria http://localhost:8
 
 ---
 
-* **GET**<br />Pegar o resultado da votação http://localhost:8080/pauta/result/{idPauta}
+* **GET**<br />Pegar o resultado da votação http://localhost:8080/pauta/result/{idPauta} <br />
+
+  Validar se vc está apto para votar. Obs esse endpoint é integrado com inverText http://localhost:8080/vote/users/{cpf}
 
 ---
 
@@ -192,6 +195,20 @@ public interface ResultKafkaApiClient {
 
         resultKafkaApiClient.sendResult(resultRequestsList);
     }
+```
+
+---
+
+E aqui a interface integrando com o outro sistema da https://api.invertexto.com/api-validador-cpf-cnpj para validar cpf
+```
+@FeignClient(name = "inver-texto-api", url = "${application.client.inver-texto-api.url}")
+public interface InverTextoApiClient {
+
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    ValidResponse validCpf(@RequestParam(name = "token") String token, @RequestParam(name = "value") String value, @RequestParam(name = "type") String type);
+
+}
+
 ```
 
 
