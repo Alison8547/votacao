@@ -26,3 +26,6 @@ application:
   client:
     result-kafka-api:
       url: http://localhost:7272/result-voting/send
+
+    inver-texto-api:
+      url: https://api.invertexto.com/v1/validator

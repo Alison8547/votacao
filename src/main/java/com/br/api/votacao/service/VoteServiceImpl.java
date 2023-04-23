@@ -7,8 +7,10 @@ import com.br.api.votacao.domain.enums.MessageVote;
 import com.br.api.votacao.dto.request.ResultRequest;
 import com.br.api.votacao.dto.request.VoteRequest;
 import com.br.api.votacao.dto.response.ResultResponse;
+import com.br.api.votacao.dto.response.ValidResponse;
 import com.br.api.votacao.dto.response.VoteResponse;
 import com.br.api.votacao.exception.BusinessException;
+import com.br.api.votacao.infrastructure.client.invertexto.InverTextoApiClient;
 import com.br.api.votacao.infrastructure.client.resultkafka.ResultKafkaApiClient;
 import com.br.api.votacao.mapper.ResultMapper;
 import com.br.api.votacao.mapper.VoteMapper;
@@ -32,6 +34,9 @@ public class VoteServiceImpl implements VoteService {
     private final PautaServiceImpl pautaService;
     private final ResultKafkaApiClient resultKafkaApiClient;
     private final ResultMapper resultMapper;
+    private final InverTextoApiClient inverTextoApiClient;
+    private final static String TOKEN_ACCESS = "3300%7CMtAG9sczWeGTllAEXD597SQW0Is6qLJC";
+    private final static String TYPE_CPF = "cpf";
 
     @Override
     public VoteResponse vote(Integer idPauta, VoteRequest voteRequest) {
@@ -95,6 +100,11 @@ public class VoteServiceImpl implements VoteService {
         resultRequestsList.add(resultRequest);
 
         resultKafkaApiClient.sendResult(resultRequestsList);
+    }
+
+    @Override
+    public ValidResponse sendCpf(String cpf) {
+        return inverTextoApiClient.validCpf(TOKEN_ACCESS, cpf, TYPE_CPF);
     }
 
 
